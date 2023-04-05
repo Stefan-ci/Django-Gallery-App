@@ -30,28 +30,28 @@ class CreateUserForm(UserCreationForm):
     username = forms.CharField(
         required=True, 
         widget=forms.TextInput(attrs={
-            'id': 'floatingInput_username',
             'class': 'form-control',
-            'placeholder': 'mon_nom_01',
+        })
+    )
+    email = forms.EmailField(
+        required=True, 
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
         })
     )
     password1 = forms.CharField(
         required=True, 
         widget=forms.PasswordInput(attrs={
-            'id': 'floatingPassword1',
             'class': 'form-control',
-            'placeholder': '*************',
         })
     )
     password2 = forms.CharField(
         required=True, 
         widget=forms.PasswordInput(attrs={
-            'id': 'floatingPassword2',
             'class': 'form-control',
-            'placeholder': '*************',
         })
     )
     
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2']
