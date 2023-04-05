@@ -14,7 +14,7 @@ class ImageAdmin(admin.ModelAdmin):
 
 
 class GalleryAdmin(admin.ModelAdmin):
-    list_display = ['user', 'date']
+    list_display = ['user', 'is_active', 'date']
     list_filter = ['is_active', 'date']
     search_fields = ['user__username', 'user__first_name', 'user__last_name', 'date']
     date_hierarchy = 'date'

@@ -46,11 +46,11 @@ def user_gallery_view(request):
         user_gallery = Gallery.objects.get(user=request.user, is_active=True)
     except Gallery.DoesNotExist:
         user_gallery = None
-        messages.error(request, "Sorry, that gallery doen't exist")
+        messages.error(request, "Sorry, that gallery does not exist")
         return redirect('home')
     
     if user_gallery and user_gallery is not None:
-        user_pictures = user_gallery.images
+        user_pictures = user_gallery.images()
     
     paginator = Paginator(user_pictures, 30)
     page = request.GET.get("page")

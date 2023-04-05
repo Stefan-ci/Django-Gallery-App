@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class Gallery(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=False, help_text="Activate/Deactivate the current gallery")
+    is_active = models.BooleanField(default=True, help_text="Activate/Deactivate the current gallery")
     date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
