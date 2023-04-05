@@ -1,0 +1,71 @@
+{% extends 'includes/base.html' %}
+
+{% load static %}
+
+
+{% block title %}
+        Login - Django Gallery
+{% endblock title %}
+
+
+
+{% block content %}
+    <div class="container">
+        <div class="row py-5 mt-5 bg-light">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 p-3">
+                <div class="mb-3">
+                    <h1 class="h3 text-center text-secondary">
+                        Login to your gallery now
+                    </h1>
+                </div>
+                <div class="form shadow">
+                    <form method="POST" class="form-control pt-3">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="id_username">
+                                    Username
+                                    <sup class="text-danger f-smaller">*</sup>
+                                </label>
+                                {{ form.username }}
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="id_username">
+                                    Password
+                                    <sup class="text-danger f-smaller">*</sup>
+                                </label>
+                                {{ form.password }}
+                            </div>
+
+                            {% if request.GET.next %}
+                                <div class="mb-3">
+                                    <input type="hidden" name="next" value="{{ request.GET.next }}" />
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="py-4 d-grid gap-1">
+                            <button type="submit" class="btn btn-info">
+                                Login
+                            </button>
+                        </div>
+
+                        <div class="modal-footer">
+                            <span>
+                                <small>
+                                    No account?
+                                    <a class="" href="{% url 'register' %}">
+                                        Register here
+                                    </a>
+                                </small>
+                            </span>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>    
+{% endblock content %}
+
