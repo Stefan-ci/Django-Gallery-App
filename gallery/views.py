@@ -95,7 +95,8 @@ def register_view(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None and user.is_active:
                     login(request, user)
-                    return redirect('home')
+                    messages.success(request, f"Thank you to join us, {request.user.username}")
+                    return redirect('user-gallery')
             except:  # if login failed, redirect to login page for self logging in.
                 return redirect('login')
 
@@ -164,8 +165,8 @@ def login_view(request):
 
 
 @login_required(login_url='login')
-def logout_view(request, user_uid: str):
+def logout_view(request):
     logout(request)
-    messages.success(request, "Vous vous êtes déconnecté(e) avec succès, à bientôt !")
+    messages.success(request, "You successfully logged out")
     return redirect(request.META.get('HTTP_REFERER'))
 
