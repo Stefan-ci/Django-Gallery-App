@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    # 3rd PARTY APPS
+    'django_unicorn',
+    
+    # LOCALE APPS
     'gallery.apps.GalleryConfig',
 ]
 
