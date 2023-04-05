@@ -1,5 +1,9 @@
+from gallery import views
 from django.urls import path
 
 
-urlpatterns = []
+
+urlpatterns = [
+    path('', views.home_view, name="home")
+]
 
