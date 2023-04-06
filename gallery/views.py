@@ -6,30 +6,43 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from gallery.models import Image, Gallery
 from gallery.decorators import unauthenticated_user
-from gallery.forms import LoginForm, CreateUserForm
+from gallery.forms import LoginForm, CreateUserForm, ImageForm
 
+
+
+
+def get_gallery(request):
+    if request.user.is_authenticated:
+        try:
+            return Gallery.objects.get(user=request.user, is_active=True)
+        except Gallery.DoesNotExist:
+            return None
+        except:
+            return None
+    return None
 
 
 
 
 def home_view(request):
+    form = ImageForm
+    context = {'form': form}
+    
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            form = ImageForm(request.POST, request.FILES) or None
+            
+            if form.is_valid():
+                images = request.FILES.getlist('images')
+                for img in images:
+                    Image.objects.create(gallery=get_gallery(request), image=img, is_deleted=False)
+                return redirect(request.META.get('HTTP_REFERER'))
+        
+        private_images = Image.objects.filter(is_open_source=False, is_deleted=False, gallery=get_gallery(request))
+        context.update({'private_images': private_images})
+        
     public_images = Image.objects.filter(is_open_source=True, is_deleted=False)
-    
-    paginator = Paginator(public_images, 30)
-    page = request.GET.get("page")
-    public_images_obj = paginator.get_page(page)
-
-    try:
-        public_images = paginator.page(page)
-    except PageNotAnInteger:
-        public_images = paginator.page(1)
-    except EmptyPage:
-        public_images = paginator.page(paginator.num_pages)
-    
-    
-    context = {
-        'public_images': public_images_obj
-    }
+    context.update({'public_images': public_images})
     
     template_name = "home.html"
     return render(request, template_name, context)
@@ -42,6 +55,8 @@ def home_view(request):
 @login_required(login_url='login')
 def user_gallery_view(request):
     user_pictures = []
+    form = ImageForm
+    
     try:    
         user_gallery = Gallery.objects.get(user=request.user, is_active=True)
     except Gallery.DoesNotExist:
@@ -51,8 +66,19 @@ def user_gallery_view(request):
     
     if user_gallery and user_gallery is not None:
         user_pictures = user_gallery.images()
+        
+        if request.method == "POST":
+            form = ImageForm(request.POST, request.FILES) or None
+            
+            if form.is_valid():
+                images = request.FILES.getlist('images')
+                for img in images:
+                    Image.objects.create(gallery=get_gallery(request), image=img, is_deleted=False)
+                return redirect(request.META.get('HTTP_REFERER'))
     
-    paginator = Paginator(user_pictures, 30)
+    
+    
+    paginator = Paginator(user_pictures, 500)
     page = request.GET.get("page")
     user_pictures_obj = paginator.get_page(page)
 
@@ -65,6 +91,7 @@ def user_gallery_view(request):
     
     
     context = {
+        'form': form,
         'user_pictures': user_pictures_obj
     }
     
@@ -139,7 +166,7 @@ def login_view(request):
                 if 'next' in request.POST:
                     return redirect(request.POST.get('next'))
                 elif not 'next' in request.POST:
-                    return redirect('home')
+                    return redirect('user-gallery')
                 else:
                     return redirect('home')
             else: #user is None or inactive

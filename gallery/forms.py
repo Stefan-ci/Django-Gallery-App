@@ -1,4 +1,5 @@
 from django import forms
+from gallery.models import Image
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -55,3 +56,19 @@ class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+
+
+
+
+class ImageForm(forms.Form):
+    images = forms.ImageField(
+        required=True,
+        widget=forms.FileInput(
+            attrs={
+                'class': 'formFileMultiple form-control',
+                'multiple': True,
+            }
+        )
+    )

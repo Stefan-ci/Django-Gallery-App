@@ -58,6 +58,3 @@ class Image(models.Model):
         return f"Picture of {self.gallery.user.username} - ID: {self.pk}"
     
 
-
-
-
