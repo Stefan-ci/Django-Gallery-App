@@ -45,7 +45,7 @@ class Image(models.Model):
     gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/%Y/%m/')
     is_open_source = models.BooleanField(default=False, help_text="Check if you want to share this picture with everyone")
-    is_deleted = models.BooleanField(default=False, help_text="Deleted (deactivate) the current image")
+    is_deleted = models.BooleanField(default=False, help_text="Delete (deactivate) the current image")
     date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -55,7 +55,7 @@ class Image(models.Model):
 
 
     def __str__(self):
-        return f"Picture of {self.gallery.user.username}"
+        return f"Picture of {self.gallery.user.username} - ID: {self.pk}"
     
 
 
